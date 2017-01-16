@@ -1,0 +1,48 @@
+{% extends "main.html" %}
+{% block content %}
+    <hr>
+    <div class="row column">
+        <h1 style="margin: 0;" class="text-center">Brand</h1>
+    </div>
+    <hr>
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class='flash'>
+                <ul>
+                    {% for message in messages %}
+                        <li><strong> {{ message }} </strong></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+
+
+
+    <div class="row padding-top padding-bottom">
+        <div class="col-md-1"></div>
+        <div class="col-md-10 padding-none">
+            <a href="{{ url_for('newBrand') }}">
+                <button class="btn btn-default" id="new-brand">
+                    <span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>Add Brand
+                </button>
+            </a>
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    {% for brand in brands %}
+        <div class="medium-4 columns front-image">
+            <div class="card"  style="background: #515151">
+                <div class="image">
+                    <a href="{{ url_for('showMenu', brand_id = brand.id) }}">
+                        <img src="{{ brand.photo }}" class="index-image">
+                        <span class="title">{{ brand.name }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

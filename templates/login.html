@@ -1,0 +1,48 @@
+{% extends "main.html" %}
+{% block content %}
+
+    <body>
+    <div class="row" style="min-height: 1024px">
+        <div class="medium-6 medium-centered large-4 large-centered columns">
+
+
+            <div class="row column">
+                <h4 class="text-center">Log in with you email account</h4>
+
+                <!-- GOOGLE PLUS SIGN IN-->
+                <div id="signInButton" class="text-center">
+          <span class="g-signin"
+                data-scope="openid email"
+                data-clientid="186064737851-45p46als8o0u7qf2ph9rjutqilm1ige1.apps.googleusercontent.com"
+                data-redirecturi="postmessage"
+                data-accesstype="offline"
+                data-cookiepolicy="single_host_origin"
+                data-callback="signInCallback"
+                data-approvalprompt="force">
+          </span>
+                </div>
+                <div class="text-center">
+                    <button>
+                        <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+                            <a href='javascript:sendTokenToServer()'></a>
+                        </fb:login-button>
+                    </button>
+                </div>
+
+
+            </div>
+
+
+            <div id="result"></div>
+            <script>
+                function signInCallback(e){e.code&&($("#signinButton").attr("style","display: none"),$.ajax({type:"POST",url:"/gconnect?state={{STATE}}",processData:!1,data:e.code,contentType:"application/octet-stream; charset=utf-8",success:function(t){t?($("#result").html("Login Successful!</br>"+t+"</br>Redirecting..."),setTimeout(function(){window.location.href="/"},4e3)):e.error?console.log("There was an error: "+e.error):$("#result").html("Failed to make a server-side call. Check your configuration and console.")}}))}
+            </script>
+            <!--END GOOGLE PLUS SIGN IN -->
+
+            <!--FACEBOOK SIGN IN -->
+            <script>
+                function sendTokenToServer(){var e=FB.getAuthResponse().accessToken;console.log(e),console.log("Welcome!  Fetching your information.... "),FB.api("/me",function(o){console.log("Successful login for: "+o.name),$.ajax({type:"POST",url:"/fbconnect?state={{STATE}}",processData:!1,data:e,contentType:"application/octet-stream; charset=utf-8",success:function(e){e?($("#result").html("Login Successful!</br>"+e+"</br>Redirecting..."),setTimeout(function(){window.location.href="/"},4e3)):$("#result").html("Failed to make a server-side call. Check your configuration and console.")}})})}window.fbAsyncInit=function(){FB.init({appId:"356821494689082",cookie:!0,xfbml:!0,version:"v2.2"})},function(e,o,n){var t,c=e.getElementsByTagName(o)[0];e.getElementById(n)||(t=e.createElement(o),t.id=n,t.src="//connect.facebook.net/en_US/sdk.js",c.parentNode.insertBefore(t,c))}(document,"script","facebook-jssdk");
+            </script>
+            <!--END FACEBOOK SIGN IN -->
+    </body>
+{% endblock %}
